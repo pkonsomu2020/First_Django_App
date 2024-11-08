@@ -7,10 +7,10 @@
     <h1>{{ post.title }}</h1>
     <p><strong>By:</strong> {{ post.author }}</p>
     <p><strong>Published on:</strong> {{ post.created_at }}</p>
-    <p><strong>Content:</strong></p>
     <div>
         <p>{{ post.content }}</p>
     </div>
+    <a href="{% url 'edit_post' post.id %}">Edit Post</a> <!-- Link to edit the post -->
     <a href="/">Back to homepage</a>
 </body>
 </html>
