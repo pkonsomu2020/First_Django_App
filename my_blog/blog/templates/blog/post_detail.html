@@ -10,7 +10,8 @@
     <div>
         <p>{{ post.content }}</p>
     </div>
-    <a href="{% url 'edit_post' post.id %}">Edit Post</a> <!-- Link to edit the post -->
+    <a href="{% url 'edit_post' post.id %}">Edit Post</a>
+    <a href="{% url 'delete_post' post.id %}">Delete Post</a> <!-- Link to delete the post -->
     <a href="/">Back to homepage</a>
 </body>
 </html>

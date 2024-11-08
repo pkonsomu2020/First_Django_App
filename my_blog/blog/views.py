@@ -32,3 +32,10 @@ def edit_post(request, id):
     else:
         form = BlogPostForm(instance=post)
     return render(request, 'blog/post_form.html', {'form': form, 'action': 'Edit'})
+
+def delete_post(request, id):
+    post = get_object_or_404(BlogPost, id=id)
+    if request.method == 'POST':
+        post.delete()  # Delete the post
+        return redirect('homepage')  # Redirect to homepage after deletion
+    return render(request, 'blog/delete_confirmation.html', {'post': post})

@@ -6,4 +6,5 @@ urlpatterns = [
     path('post/<int:id>/', views.post_detail, name='post_detail'),  # URL for individual post detail
     path('post/add/', views.add_post, name='add_post'),  # URL for adding a new post
     path('post/edit/<int:id>/', views.edit_post, name='edit_post'),  # URL for editing a post
+    path('post/delete/<int:id>/', views.delete_post, name='delete_post'),  # URL for deleting posts
 ]
