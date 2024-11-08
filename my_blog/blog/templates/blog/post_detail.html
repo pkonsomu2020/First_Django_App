@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ post.title }}</title>
+</head>
+<body>
+    <h1>{{ post.title }}</h1>
+    <p><strong>By:</strong> {{ post.author }}</p>
+    <p><strong>Published on:</strong> {{ post.created_at }}</p>
+    <p><strong>Content:</strong></p>
+    <div>
+        <p>{{ post.content }}</p>
+    </div>
+    <a href="/">Back to homepage</a>
+</body>
+</html>
