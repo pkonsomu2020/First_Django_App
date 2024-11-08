@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import BlogPost
 from .forms import BlogPostForm
+from django.contrib.auth.decorators import login_required
+
 # Create your views here.
 
 def homepage(request):
@@ -38,4 +40,35 @@ def delete_post(request, id):
     if request.method == 'POST':
         post.delete()  # Delete the post
         return redirect('homepage')  # Redirect to homepage after deletion
+    return render(request, 'blog/delete_confirmation.html', {'post': post})
+
+@login_required
+def add_post(request):
+    if request.method == 'POST':
+        form = BlogPostForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('homepage')
+    else:
+        form = BlogPostForm()
+    return render(request, 'blog/add_post.html', {'form': form})
+
+@login_required
+def edit_post(request, id):
+    post = get_object_or_404(BlogPost, id=id)
+    if request.method == 'POST':
+        form = BlogPostForm(request.POST, instance=post)
+        if form.is_valid():
+            form.save()
+            return redirect('post_detail', id=post.id)
+    else:
+        form = BlogPostForm(instance=post)
+    return render(request, 'blog/edit_post.html', {'form': form, 'post': post})
+
+@login_required
+def delete_post(request, id):
+    post = get_object_or_404(BlogPost, id=id)
+    if request.method == 'POST':
+        post.delete()
+        return redirect('homepage')
     return render(request, 'blog/delete_confirmation.html', {'post': post})
