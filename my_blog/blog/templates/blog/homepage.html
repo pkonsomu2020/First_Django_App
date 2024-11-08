@@ -1,0 +1,23 @@
+<!-- blog/templates/blog/homepage.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Blog Home</title>
+</head>
+<body>
+    <h1>Welcome to My Blog</h1>
+    <hr>
+    {% for post in posts %}
+        <div>
+            <h2>{{ post.title }}</h2>
+            <p>By {{ post.author }} | {{ post.created_at }}</p>
+            <p>{{ post.content|slice:":100" }}...</p>  <!-- Display the first 100 characters of content -->
+            <a href="#">Read more</a>
+        </div>
+        <hr>
+    {% empty %}
+        <p>No blog posts available.</p>
+    {% endfor %}
+</body>
+</html>
