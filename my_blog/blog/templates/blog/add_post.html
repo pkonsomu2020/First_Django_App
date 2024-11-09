@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Post</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1>Add New Post</h1>
+
+        <!-- Display error messages if form submission is invalid -->
+        {% if form.errors %}
+            <div class="alert alert-danger">
+                <strong>There were some errors with your submission:</strong>
+                <ul>
+                    {% for field in form %}
+                        {% for error in field.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+
+        <!-- Form for adding a new post -->
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+                {{ form.title.label_tag }}
+                {{ form.title }}
+            </div>
+            <div class="form-group">
+                {{ form.content.label_tag }}
+                {{ form.content }}
+            </div>
+            <!-- Include other form fields as necessary (e.g., image upload, category selection) -->
+            {% if form.image %}
+                <div class="form-group">
+                    {{ form.image.label_tag }}
+                    {{ form.image }}
+                </div>
+            {% endif %}
+
+            <button type="submit" class="btn btn-primary">Add Post</button>
+        </form>
+
+        <a href="{% url 'blog:homepage' %}">Back to Home</a>
+    </div>
+</body>
+</html>

@@ -3,6 +3,8 @@
 <html>
 <head>
     <title>{{ post.title }}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'blog/style.css' %}">
 </head>
 <body>
     <h1>{{ post.title }}</h1>
