@@ -16,5 +16,30 @@
         <a href="{% url 'delete_post' post.id %}">Delete Post</a>
     {% endif %}
     <a href="/">Back to homepage</a>
+
+
+    <h1>{{ post.title }}</h1>
+    <p>{{ post.content }}</p>
+
+    <h2>Comments</h2>
+    {% for comment in comments %}
+    <div>
+        <p><strong>{{ comment.author }}:</strong> {{ comment.text }}</p>
+        <p><em>{{ comment.created_at }}</em></p>
+    </div>
+    {% empty %}
+        <p>No comments yet.</p>
+    {% endfor %}
+
+    <h3>Leave a Comment</h3>
+    {% if request.user.is_authenticated %}
+        <form method="post">
+            {% csrf_token %}
+            {{ comment_form.as_p }}
+            <button type="submit">Post Comment</button>
+        </form>
+    {% else %}
+        <p><a href="{% url 'login' %}">Log in</a> to leave a comment.</p>
+    {% endif %}
 </body>
 </html>

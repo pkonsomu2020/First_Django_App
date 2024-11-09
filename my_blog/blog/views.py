@@ -1,17 +1,18 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import BlogPost
+from .models import Post, Comment
+from .forms import CommentForm
 from .forms import BlogPostForm
 from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
 def homepage(request):
-    posts = BlogPost.objects.all()  # Get all posts
+    posts = Post.objects.all()  # Get all posts
     return render(request, 'blog/homepage.html', {'posts': posts})
 
 def post_detail(request, id):
     # Use get_object_or_404 to retrieve a post by its id or return a 404 if not found
-    post = get_object_or_404(BlogPost, id=id)
+    post = get_object_or_404(Post, id=id)
     return render(request, 'blog/post_detail.html', {'post': post})
 
 def add_post(request):
@@ -25,7 +26,7 @@ def add_post(request):
     return render(request, 'blog/post_form.html', {'form': form, 'action': 'Add'})
 
 def edit_post(request, id):
-    post = get_object_or_404(BlogPost, id=id)
+    post = get_object_or_404(Post, id=id)
     if request.method == 'POST':
         form = BlogPostForm(request.POST, instance=post)
         if form.is_valid():
@@ -36,7 +37,7 @@ def edit_post(request, id):
     return render(request, 'blog/post_form.html', {'form': form, 'action': 'Edit'})
 
 def delete_post(request, id):
-    post = get_object_or_404(BlogPost, id=id)
+    post = get_object_or_404(Post, id=id)
     if request.method == 'POST':
         post.delete()  # Delete the post
         return redirect('homepage')  # Redirect to homepage after deletion
@@ -55,7 +56,7 @@ def add_post(request):
 
 @login_required
 def edit_post(request, id):
-    post = get_object_or_404(BlogPost, id=id)
+    post = get_object_or_404(Post, id=id)
     if request.method == 'POST':
         form = BlogPostForm(request.POST, instance=post)
         if form.is_valid():
@@ -67,8 +68,24 @@ def edit_post(request, id):
 
 @login_required
 def delete_post(request, id):
-    post = get_object_or_404(BlogPost, id=id)
+    post = get_object_or_404(Post, id=id)
     if request.method == 'POST':
         post.delete()
         return redirect('homepage')
     return render(request, 'blog/delete_confirmation.html', {'post': post})
+
+
+def post_detail(request, id):
+    post = get_object_or_404(Post, id=id)
+    comments = post.comments.all()  # Fetch all comments related to the post
+    if request.method == "POST":
+        comment_form = CommentForm(request.POST)
+        if comment_form.is_valid():
+            comment = comment_form.save(commit=False)
+            comment.post = post
+            comment.author = request.user
+            comment.save()
+            return redirect('post_detail', id=post.id)
+    else:
+        comment_form = CommentForm()
+    return render(request, 'blog/post_detail.html', {'post': post, 'comments': comments, 'comment_form': comment_form})
